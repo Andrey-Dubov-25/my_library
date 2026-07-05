@@ -7,12 +7,13 @@ from schemas.books import BookAddSchema
 
 
 class BookRepository:
+    """CRUD для книг."""
 
     @classmethod
     async def add_one(
         cls, data: BookAddSchema, session: AsyncSession
     ) -> BooksModel:
-        """Создание книги в БД"""
+        """Создать новую книгу."""
         book_dict = data.model_dump()
         book = BooksModel(**book_dict)
         session.add(book)
@@ -22,7 +23,7 @@ class BookRepository:
 
     @classmethod
     async def find_all(cls, session: AsyncSession):
-        """Поиск книг в БД."""
+        """Получить все книги."""
         query = select(BooksModel)
         result = await session.execute(query)
         books_models = result.scalars().all()
@@ -30,7 +31,7 @@ class BookRepository:
 
     @classmethod
     async def find_one(cls, book_id, session: AsyncSession):
-        """Поиск книги в БД по ее id."""
+        """Найти книгу по ее id."""
         query = select(BooksModel).where(BooksModel.id == book_id)
         result = await session.execute(query)
         book = result.scalars().first()
@@ -47,7 +48,7 @@ class BookRepository:
     async def reload_one(
         cls, book_id, data: BookAddSchema, session: AsyncSession
     ):
-        """Полное обновление книги."""
+        """Полностью обновить книгу."""
         book = await BookRepository.find_one(book_id, session)
         data_dict = data.model_dump()
         stmt = update(BooksModel).where(
@@ -60,7 +61,7 @@ class BookRepository:
 
     @classmethod
     async def delete_one(cls, book_id, session: AsyncSession):
-        """"Поиск книги в БД по ее id и удаление."""
+        """"Удалить книгу по ее id."""
         book = await BookRepository.find_one(book_id, session)
         await session.delete(book)
         await session.commit()

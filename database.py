@@ -15,10 +15,12 @@ new_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
 class Model(MappedAsDataclass, DeclarativeBase):
+    """Базовая модель таблиц."""
     pass
 
 
 async def get_db():
+    """Создать сессию."""
     async with new_session() as session:
         yield session
 

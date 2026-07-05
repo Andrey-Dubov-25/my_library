@@ -8,6 +8,7 @@ from routers.book import router as books_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Старт и остановка приложения."""
     async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.create_all)
         print('База данных готова к работе')

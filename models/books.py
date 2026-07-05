@@ -4,6 +4,7 @@ from database import Model
 
 
 class BooksModel(Model):
+    """Таблица книг в базе данных."""
     __tablename__ = 'books'
 
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
